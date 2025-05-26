@@ -58,7 +58,6 @@ INSERT INTO rangers(name,region)VALUES
 ('Derek Fox','Coastal Plains');
 SELECT * FROM rangers WHERE name='Derek Fox' AND region='Coastal Plains';
 
-DELETE FROM rangers WHERE name IN('Darek Fox', 'Derek Fox');
 
 
 -- problem-2
@@ -98,3 +97,11 @@ SET conservation_status ='Historic' WHERE discovery_date<'1800-01-01';
 SELECT *
 FROM sightings
 WHERE EXTRACT(HOUR FROM sighting_time) BETWEEN 12 AND 17 THEN 'Afternoon';
+
+
+-- problem-9
+
+DELETE FROM rangers 
+WHERE ranger_id NOT IN (
+    SELECT DISTINCT ranger_id FROM sightings
+);
