@@ -53,15 +53,11 @@ SELECT * FROM sightings;
 
 
 -- problem-1
-
 INSERT INTO rangers(name,region)VALUES
 ('Derek Fox','Coastal Plains');
-SELECT * FROM rangers WHERE name='Derek Fox' AND region='Coastal Plains';
-
 
 
 -- problem-2
-
 SELECT COUNT(DISTINCT species_id) AS unique_species_count FROM sightings;
 
 
@@ -70,7 +66,6 @@ SELECT * from sightings WHERE location LIKE '%Pass%';
 
 
 -- problem-4
-
 SELECT r.name,COUNT(s.sighting_id) AS total_sightings FROM rangers r
  JOIN sightings s ON r.ranger_id = s.ranger_id
 GROUP BY r.name;
@@ -94,14 +89,17 @@ SET conservation_status ='Historic' WHERE discovery_date<'1800-01-01';
 
 
 -- problem-8
-SELECT *
-FROM sightings
-WHERE EXTRACT(HOUR FROM sighting_time) BETWEEN 12 AND 17 THEN 'Afternoon';
-
+SELECT sighting_id,
+    CASE
+        WHEN EXTRACT(HOUR FROM sighting_time) < 12 THEN 'Morning'
+        WHEN EXTRACT(HOUR FROM sighting_time) BETWEEN 12 AND 17 THEN 'Afternoon'
+        WHEN EXTRACT(HOUR FROM sighting_time)> 17 THEN 'Evening' 
+    END AS time_of_day
+FROM sightings;
 
 -- problem-9
 
 DELETE FROM rangers 
 WHERE ranger_id NOT IN (
     SELECT DISTINCT ranger_id FROM sightings
-);
+); 
